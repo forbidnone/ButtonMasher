@@ -1,6 +1,7 @@
 // included Libraries
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <string>
 
 
 // entry point for the program
@@ -59,7 +60,21 @@ int main()
 	authorText.setFont(gameFont);
 	authorText.setString("By Cameron");
 	authorText.setPosition(gameWindow.getSize().x / 2 
-		- titleText.getLocalBounds().width / 2, 180);
+		- titleText.getLocalBounds().width / 2, 130);
+
+
+	// Score
+	int score = 0;
+
+	//Score text
+	sf::Text scoreText;
+	scoreText.setFont(gameFont);
+	scoreText.setString("Score: " + std::to_string(score));
+	scoreText.setCharacterSize(16);
+	scoreText.setFillColor(sf::Color::White);
+	scoreText.setPosition(30, 30);
+
+
 
 	//-----------------------------------------------------------------------------------
 	// Game Loop
@@ -86,9 +101,12 @@ int main()
 		}
 
 
-		// TODO : Update game state
+		//Update game state
+		score = score + 1;
+		scoreText.setString("Score: " + std::to_string(score));
 
-		// TODO : Draw Graphics
+
+
 
 		// Clear the window to a single colour
 		gameWindow.clear(sf::Color::Black);
@@ -98,6 +116,7 @@ int main()
 		gameWindow.draw(buttonSprite);
 		gameWindow.draw(titleText);
 		gameWindow.draw(authorText);
+		gameWindow.draw(scoreText);
 
 
 		// Display the window contents on the screen
