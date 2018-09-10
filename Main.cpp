@@ -46,8 +46,20 @@ int main()
 	sf::Text titleText;
 	titleText.setFont(gameFont);
 	titleText.setString("Button Masher!");
+
+	titleText.setCharacterSize(100);
+	titleText.setFillColor(sf::Color::Magenta);
+	titleText.setStyle(sf::Text::Bold | sf::Text::Italic);
+
+
 	titleText.setPosition(gameWindow.getSize().x / 2
 		- titleText.getLocalBounds().width / 2, 30);
+
+	sf::Text authorText;
+	authorText.setFont(gameFont);
+	authorText.setString("By Cameron");
+	authorText.setPosition(gameWindow.getSize().x / 2 
+		- titleText.getLocalBounds().width / 2, 180);
 
 	//-----------------------------------------------------------------------------------
 	// Game Loop
@@ -85,6 +97,7 @@ int main()
 		// Draw everything
 		gameWindow.draw(buttonSprite);
 		gameWindow.draw(titleText);
+		gameWindow.draw(authorText);
 
 
 		// Display the window contents on the screen
