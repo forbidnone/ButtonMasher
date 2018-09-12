@@ -75,6 +75,16 @@ int main()
 	scoreText.setFillColor(sf::Color::White);
 	scoreText.setPosition(30, 30);
 
+	
+	//High Score text
+	sf::Text highScoreText;
+	highScoreText.setFont(gameFont);
+	highScoreText.setString("High Score: " + std::to_string(highScore));
+	highScoreText.setCharacterSize(16);
+	highScoreText.setFillColor(sf::Color::White);
+	highScoreText.setPosition(30, 60);
+
+
 	//Timer text
 	sf::Text timerText;
 	timerText.setFont(gameFont);
@@ -158,6 +168,11 @@ int main()
 						//if yes, increase score
 						score = score + 1;
 
+						if (score >= highScore)
+						{
+							highScore = score;
+						}
+
 					}
 					else
 					{
@@ -193,17 +208,13 @@ int main()
 
 			if (timeRemaining.asSeconds() <= 0.0f)
 			{
+
 				timeRemaining = sf::seconds(0.0f);
 				playing = false;
 				promptText.setString("Your final score was " + std::to_string(score) + "!\nClick the button to restart the game");
 				resetRemaining = resetTimeLimit;
-
-				if (score >= highScore)
-				{
-					highScore = score;
-				}
-
 				overSound.play();
+
 			}
 
 
@@ -217,6 +228,7 @@ int main()
 		// Update text displays based on Data
 		timerText.setString("Time Remaining: " + std::to_string((int)std::ceilf(timeRemaining.asSeconds())));
 		scoreText.setString("Score: " + std::to_string(score));
+		highScoreText.setString("High Score: " + std::to_string(highScore));
 
 
 		// Clear the window to a single colour
@@ -230,6 +242,7 @@ int main()
 		gameWindow.draw(scoreText);
 		gameWindow.draw(timerText);
 		gameWindow.draw(promptText);
+		gameWindow.draw(highScoreText);
 
 
 		// Display the window contents on the screen
