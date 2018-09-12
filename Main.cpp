@@ -65,6 +65,7 @@ int main()
 
 	// Score
 	int score = 0;
+	int highScore = 0;
 
 	//Score text
 	sf::Text scoreText;
@@ -83,9 +84,22 @@ int main()
 	timerText.setPosition(gameWindow.getSize().x - timerText.getLocalBounds().width - 30, 30);
 
 
+	//Prompt text
+	sf::Text promptText;
+	promptText.setFont(gameFont);
+	promptText.setString("Click the button to start the game");
+	promptText.setCharacterSize(16);
+	promptText.setFillColor(sf::Color::White);
+	promptText.setPosition(gameWindow.getSize().x / 2 - timerText.getLocalBounds().width - 30, gameWindow.getSize().y - 100);
+
+
+
+
 	//Timer functionallity
 	sf::Time timerLimit = sf::seconds(10.0f);
 	sf::Time timeRemaining = timerLimit;
+	sf::Time resetTimeLimit = sf::seconds(3.0f);
+	sf::Time resetRemaining = sf::seconds(0.0f);
 	sf::Clock gameClock;
 
 
@@ -95,6 +109,15 @@ int main()
 	sf::Sound clickSound;
 	clickSound.setBuffer(clickBuffer);
 
+
+	//Game over sound
+	sf::SoundBuffer overBuffer;
+	overBuffer.loadFromFile("audio/gameover.ogg");
+	sf::Sound overSound;
+	overSound.setBuffer(overBuffer);
+
+	// Game State
+	bool playing = false;
 
 
 	//-----------------------------------------------------------------------------------
@@ -128,7 +151,29 @@ int main()
 				{ 
 
 					// We Clicked the button
-					score = score + 1;
+
+					// Are we playing?
+					if (playing == true)
+					{
+						//if yes, increase score
+						score = score + 1;
+
+					}
+					else
+					{
+						if (resetRemaining.asSeconds() <= 0.0f)
+						{
+							//if not, start playing
+							playing = true;
+
+
+
+							// Reset the game data
+							score = 0;
+							timeRemaining = timerLimit;
+							promptText.setString("Click the button as fast as you can!");
+						}
+					}
 					
 					// Play the click sound
 					clickSound.play();
@@ -140,9 +185,37 @@ int main()
 
 		//Update game state
 		sf::Time frameTime = gameClock.restart();
-		timeRemaining = timeRemaining - frameTime;
-		timerText.setString("Time Remaining: " + std::to_string((int)std::ceilf(timeRemaining.asSeconds())));
 
+		if (playing == true)
+		{
+		
+			timeRemaining = timeRemaining - frameTime;
+
+			if (timeRemaining.asSeconds() <= 0.0f)
+			{
+				timeRemaining = sf::seconds(0.0f);
+				playing = false;
+				promptText.setString("Your final score was " + std::to_string(score) + "!\nClick the button to restart the game");
+				resetRemaining = resetTimeLimit;
+
+				if (score >= highScore)
+				{
+					highScore = score;
+				}
+
+				overSound.play();
+			}
+
+
+		}
+
+		else
+		{
+				resetRemaining = resetRemaining - frameTime;
+		}
+		
+		// Update text displays based on Data
+		timerText.setString("Time Remaining: " + std::to_string((int)std::ceilf(timeRemaining.asSeconds())));
 		scoreText.setString("Score: " + std::to_string(score));
 
 
@@ -156,6 +229,7 @@ int main()
 		gameWindow.draw(authorText);
 		gameWindow.draw(scoreText);
 		gameWindow.draw(timerText);
+		gameWindow.draw(promptText);
 
 
 		// Display the window contents on the screen
