@@ -84,7 +84,7 @@ int main()
 
 
 	//Timer functionallity
-	sf::Time timerLimit = sf::seconds(20.0f);
+	sf::Time timerLimit = sf::seconds(10.0f);
 	sf::Time timeRemaining = timerLimit;
 	sf::Clock gameClock;
 
@@ -110,6 +110,19 @@ int main()
 				// Close the game window
 				gameWindow.close();
 
+			}
+
+			// Check if the event is a mouse button pressed event
+			if (gameEvent.type == sf::Event::MouseButtonPressed)
+			{
+
+				if (buttonSprite.getGlobalBounds().contains(gameEvent.mouseButton.x, gameEvent.mouseButton.y))
+				{ 
+
+					// We Clicked the button
+					score = score + 1;
+
+				}
 			}
 		}
 
