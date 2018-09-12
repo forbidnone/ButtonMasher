@@ -74,6 +74,14 @@ int main()
 	scoreText.setFillColor(sf::Color::White);
 	scoreText.setPosition(30, 30);
 
+	//Timer text
+	sf::Text timerText;
+	timerText.setFont(gameFont);
+	timerText.setString("Time Remaining: " + std::to_string(score));
+	timerText.setCharacterSize(16);
+	timerText.setFillColor(sf::Color::White);
+	timerText.setPosition(gameWindow.getSize().x - timerText.getLocalBounds().width, 30);
+
 
 
 	//-----------------------------------------------------------------------------------
@@ -102,10 +110,7 @@ int main()
 
 
 		//Update game state
-		score = score + 1;
 		scoreText.setString("Score: " + std::to_string(score));
-
-
 
 
 		// Clear the window to a single colour
@@ -117,6 +122,7 @@ int main()
 		gameWindow.draw(titleText);
 		gameWindow.draw(authorText);
 		gameWindow.draw(scoreText);
+		gameWindow.draw(timerText);
 
 
 		// Display the window contents on the screen
